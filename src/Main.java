@@ -1,24 +1,22 @@
-import abstraction.ISkill;
-import abstraction.hero.Camille;
-import abstraction.hero.Diana;
-import abstraction.hero.Irelia;
+import factory.ISkill;
+import factory.HeroFactory;
 
 import java.util.Scanner;
     /*
-    本代码是v3版本
+    本代码是v4版本
     重点理论：
-    (1)单纯的interface可以统一方法的调用，但是不能统一对象的实例化。（英雄联盟V3版本就可以体现）
-    (2)面向对象常做的两件事情：实例化对象、调用方法(实现业务逻辑)
-    (3)统一方法有意义吗？有的，因为实际项目可能有非常多的对象、方法，我统一后就只有一条代码，多简洁。
-    (4)只有一段代码中没有new出现，才能保持相对稳定，逐步实现OCP原则(实质意思是，一段代码如果要保持稳定，就不应该负责对象的实例化)
-    (5)上面的这句话，实质上并不是要消除对象实例化，而是要把这个对象实例化的过程转移到其他代码片段。
-    下一个版本需要解决“统一对象的实例化”的问题。
+    本次版本的目的是将new实例化对象给统一起来
+    (0)新增一个新的英雄(修改)，但是代码不用改动，就说明这一段代码是稳定的，
+    (1)使用了简单的工厂模式，这时候就很稳定了，将new实例化给统一到一个地方去.
+    (2)以后添加新英雄不用修改main函数了。此时可以说“main函数实现了OCP，变得稳定”，但是HeroFactory却没有实现OCP，还是不稳定
+    (3)上面的这句话，其实是保证了main的稳定性但是引入了新的HeroFactory的不稳定，其实是合理的。
+    因为代码总是不稳定的，但是我们可以将不稳定的代码封装隔离到一个地方去，这就是稳定的相对性。
+    (4)软件中的“变化“带来了不稳定
     * */
 
 public class Main {
 
-    //下面是v2版本
-
+    /*下面代码是版本v2*/
 //    public static void main(String[] args){
 //        String name = Main.getPlayerInput();
 //        switch (name){                        //这个switch-case功能不单纯，因为它做了两件事：实例化对象+实现业务逻辑
@@ -41,25 +39,33 @@ public class Main {
 //
 //    }
 
-    //下面代码是版本v3
-    public static void main(String[] args) {
+    /*下面代码是版本v3*/
+//    public static void main(String[] args) {
+//        String name = Main.getPlayerInput();
+//        ISkill iSkill;
+//        switch(name){                   //这个switch-case功能很单纯，只做一件事：实例化对象(单一职责)。因此以后可以提取为一个方法
+//            case "Diana":
+//                iSkill = new Diana();   //依然需要对象逐个new，说明"单纯的interface不能统一对象的实例化"
+//                break;
+//            case "Irelia":
+//                iSkill = new Irelia();
+//                break;
+//            case "Camille":
+//                iSkill = new Camille();
+//                break;
+//            default:
+//                throw new IllegalStateException("Unexpected value: " + name);
+//        }
+//        iSkill.r();     //体现出"interface可以统一方法的调用"
+//    }
+
+    /*下面代码是版本v4*/
+    public static void main(String[] args) throws Exception{
         String name = Main.getPlayerInput();
-        ISkill iSkill;
-        switch(name){                   //这个switch-case功能很单纯，只做一件事：实例化对象(单一职责)。因此以后可以提取为一个方法
-            case "Diana":
-                iSkill = new Diana();   //依然需要对象逐个new，说明"单纯的interface不能统一对象的实例化"
-                break;
-            case "Irelia":
-                iSkill = new Irelia();
-                break;
-            case "Camille":
-                iSkill = new Camille();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + name);
-        }
-        iSkill.r();     //体现出"interface可以统一方法的调用"
+        ISkill iSkill = HeroFactory.getHero(name);
+        iSkill.r();
     }
+
     private static String getPlayerInput(){
         System.out.println("请输入英雄名字：");
         Scanner scanner = new Scanner(System.in);
