@@ -1,17 +1,12 @@
-import factory.ISkill;
-import factory.HeroFactory;
+import reflect.ISkill;
+import reflect.HeroFactory;
 
 import java.util.Scanner;
     /*
-    本代码是v4版本
-    重点理论：
-    本次版本的目的是将new实例化对象给统一起来
-    (0)新增一个新的英雄(修改)，但是代码不用改动，就说明这一段代码是稳定的，
-    (1)使用了简单的工厂模式，这时候就很稳定了，将new实例化给统一到一个地方去.
-    (2)以后添加新英雄不用修改main函数了。此时可以说“main函数实现了OCP，变得稳定”，但是HeroFactory却没有实现OCP，还是不稳定
-    (3)上面的这句话，其实是保证了main的稳定性但是引入了新的HeroFactory的不稳定，其实是合理的。
-    因为代码总是不稳定的，但是我们可以将不稳定的代码封装隔离到一个地方去，这就是稳定的相对性。
-    (4)软件中的“变化“带来了不稳定
+    本代码是v5版本
+    使用了反射机制reflect，将switch也消除
+    现在到了v5版本了，使用了interface+factory+reflect，实现了OCP
+    但是还是没有用上IOC和DI
     * */
 
 public class Main {
